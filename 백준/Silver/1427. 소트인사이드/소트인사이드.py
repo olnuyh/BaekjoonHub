@@ -9,13 +9,9 @@ for i in range(len(l)):
         if l[j] > l[m]:
             m = j
 
-    if l[i] < l[m]:
+    if l[m] > l[i]:
         temp = l[i]
         l[i] = l[m]
-        l[m]= temp
+        l[m] = temp
 
-answer = ''
-for i in range(len(l)):
-    answer += l[i]
-
-print(int(answer))
+print(int(''.join(l)))
