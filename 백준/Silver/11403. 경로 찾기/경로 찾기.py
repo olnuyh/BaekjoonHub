@@ -3,7 +3,6 @@ read = sys.stdin.readline
 
 n = int(read())
 distance = []
-answer = [[0] * n for _ in range(n)]
 for i in range(n):
     distance.append(list(map(int, read().split())))
 
