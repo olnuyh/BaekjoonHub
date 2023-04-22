@@ -1,8 +1,14 @@
-from itertools import permutations
 n, m = map(int, input().split())
-nums = [i for i in range(1, n + 1)]
-combi = permutations(nums, m)
-for i in combi:
-    for j in i:
-        print(j, end = ' ')
-    print()
+l = []
+
+def dfs():
+    if len(l) == m:
+        print(' '.join(map(str, l)))
+        return
+    for i in range(1, n + 1):
+        if i not in l:
+            l.append(i)
+            dfs()
+            l.pop()
+
+dfs()
