@@ -5,8 +5,7 @@ public class Main{
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
 		int[] nums = new int[n + 1];
-		for(int i = 1; i <= n; i++)
-			nums[i] = i;
+	
 		int count = 1;
 		int start = 1;
 		int end = 1;
@@ -15,15 +14,15 @@ public class Main{
 		{
 			if(sum == n) {
 				count += 1;
-				sum -= nums[start];
-				start += 1;
+				end += 1;
+				sum += end;
 			}
 			else if(sum < n) {
 				end += 1;
-				sum += nums[end];
+				sum += end;
 			}
 			else if(sum > n) {
-				sum -= nums[start];
+				sum -= start;
 				start += 1;
 			}
 		}
