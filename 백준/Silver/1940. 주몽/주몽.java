@@ -7,15 +7,13 @@ import java.util.StringTokenizer;
 public class Main{
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer stk = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(stk.nextToken());
-		stk = new StringTokenizer(br.readLine());
-		int m = Integer.parseInt(stk.nextToken());
+		int n = Integer.parseInt(br.readLine());
+		int m = Integer.parseInt(br.readLine());
 		
 		int[] materials = new int[n];
 		
-		stk = new StringTokenizer(br.readLine());
+		StringTokenizer stk = new StringTokenizer(br.readLine());
 		for(int i = 0; i < n; i++)
 		{
 			materials[i] = Integer.parseInt(stk.nextToken()); 
@@ -30,16 +28,16 @@ public class Main{
 		while(start < end) {
 			int sum = materials[start] + materials[end];
 			
-			if(sum == m) {
-				count++;
-				start++;
-				end--;
-			}
-			else if(sum > m) {
-				end--;
+			if(sum > m) {
+				end --;
 			}
 			else if(sum < m) {
 				start++;
+			}
+			else {
+				count++;
+				start++;
+				end--;
 			}
 		}
 		System.out.println(count);
