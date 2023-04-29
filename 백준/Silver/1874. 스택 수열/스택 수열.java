@@ -9,7 +9,7 @@ public class Main{
 		int n = Integer.parseInt(br.readLine());
 	
 		int num = 1;
-		Stack<Integer> stack = new Stack();
+		Stack<Integer> stack = new Stack<>();
 		boolean isOk = true;
 		
 		for(int i = 0; i < n; i++) {
