@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -23,28 +22,11 @@ public class Main{
 		for(int i = 0; i < m; i++)
 		{
 			int find = Integer.parseInt(stk.nextToken());
-			boolean isPresent = false;
-			int start = 0;
-			int end = n - 1;
-			
-			while(start <= end)
-			{
-				int median = (start + end) / 2;
-				if(A[median] == find)
-				{
-					isPresent = true;
-					break;
-				}
-				else if(A[median] > find)
-					end = median - 1;
-				else
-					start = median + 1;
-			}
-			
-			if(isPresent)
-				System.out.println(1);
-			else
+			int index = Arrays.binarySearch(A, find);
+			if(index < 0)
 				System.out.println(0);
+			else
+				System.out.println(1);
 		}
 	}
-	}
+}
