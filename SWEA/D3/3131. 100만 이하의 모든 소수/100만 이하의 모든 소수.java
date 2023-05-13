@@ -10,12 +10,10 @@ class Solution
 
         for(int i = 2; i <= Math.sqrt(1000000); i++)
         {
+            if(nums[i] == 0)
+                continue;
             for(int j = i + i; j <= 1000000; j += i)
-            {
-                if(nums[j] == 0)
-                    continue;
                 nums[j] = 0;
-            }
         }
 
         for(int i = 2; i <= 1000000; i++)
