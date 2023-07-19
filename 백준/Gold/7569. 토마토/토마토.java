@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-class Main{
+public class Main {
 	public static int m, n, h;
 	public static int[][] deltas = {{-1, 0, 0}, 
 								{1, 0, 0},
@@ -26,7 +26,7 @@ class Main{
 		int[][][] tomatoes = new int[h][n][m];
 		
 		Queue<int[]> q = new LinkedList<>();
-		boolean[][][] visited = new boolean[h][n][m];
+		int isNotRipen = 0;
 		
 		for(int i = 0; i < h; i++)
 		{
@@ -36,15 +36,15 @@ class Main{
 				{
 					tomatoes[i][j][k] = sc.nextInt();
 					if(tomatoes[i][j][k] == 1)
-					{
 						q.add(new int[] {i, j, k});
-						visited[i][j][k] = true;
-					}
+					else if(tomatoes[i][j][k] == 0)
+						isNotRipen++;
 				}
 			}
 		}
 		
 		int day = -1;
+		int isRipen = 0;
 		
 		while(!q.isEmpty())
 		{
@@ -59,9 +59,10 @@ class Main{
 					int nx = now[1] + deltas[j][1];
 					int ny = now[2] + deltas[j][2];
 					
-					if(isIn(nz, nx, ny) && !visited[nz][nx][ny] && tomatoes[nz][nx][ny] == 0)
+					if(isIn(nz, nx, ny) && tomatoes[nz][nx][ny] == 0)
 					{
-						visited[nz][nx][ny] = true;
+						tomatoes[nz][nx][ny] = tomatoes[now[0]][now[1]][now[2]] + 1;
+						isRipen++;
 						q.add(new int[] {nz, nx, ny});
 					}				
 				}
@@ -70,24 +71,7 @@ class Main{
 			day++;
 		}
 		
-		boolean isRipen = true;
-		
-		outer : for(int i = 0; i < h; i++)
-		{
-			for(int j = 0; j < n; j++)
-			{
-				for(int k = 0; k < m; k++)
-				{
-					if(tomatoes[i][j][k] == 0 && !visited[i][j][k])
-					{
-						isRipen = false;
-						break outer;
-					}
-				}
-			}
-		}
-		
-		if(isRipen)
+		if(isRipen == isNotRipen)
 			System.out.println(day);
 		else
 			System.out.println(-1);
