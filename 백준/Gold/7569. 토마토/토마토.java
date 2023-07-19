@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 	public static int m, n, h;
@@ -16,12 +19,14 @@ public class Main {
 		return z >= 0 && z < h && x >= 0 && x < n && y >= 0 && y < m;
 	}
 	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer stk = new StringTokenizer(br.readLine());
+		//Scanner sc = new Scanner(System.in);
 		
-		m = sc.nextInt();
-		n = sc.nextInt();
-		h = sc.nextInt();
+		m = Integer.parseInt(stk.nextToken());
+		n = Integer.parseInt(stk.nextToken());
+		h = Integer.parseInt(stk.nextToken());
 		
 		int[][][] tomatoes = new int[h][n][m];
 		
@@ -32,9 +37,10 @@ public class Main {
 		{
 			for(int j = 0; j < n; j++)
 			{
+				stk = new StringTokenizer(br.readLine());
 				for(int k = 0; k < m; k++)
 				{
-					tomatoes[i][j][k] = sc.nextInt();
+					tomatoes[i][j][k] = Integer.parseInt(stk.nextToken());
 					if(tomatoes[i][j][k] == 1)
 						q.add(new int[] {i, j, k});
 					else if(tomatoes[i][j][k] == 0)
