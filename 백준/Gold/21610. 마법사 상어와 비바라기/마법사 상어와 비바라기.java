@@ -17,7 +17,6 @@ class Cloud{
 
 public class Main {
 	public static int[][] deltas = {{0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}};
-	public static int[][] deltas2 = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,7 +42,7 @@ public class Main {
 		}
 			
 		Queue<Cloud> q = new LinkedList<>();
-		q.add(new Cloud(n - 1, 0));
+		q.add(new Cloud(n - 1, 0)); // 처음 생성된 비구름
 		q.add(new Cloud(n - 1, 1));
 		q.add(new Cloud(n - 2, 0));
 		q.add(new Cloud(n - 2, 1));
@@ -55,43 +54,20 @@ public class Main {
 			int d = move[i][0] - 1;
 			int l = move[i][1];
 			
-			for(int j = 0; j < q.size(); j++) {
-				Cloud now = q.poll();
+			for(Cloud cloud : q) { // 구름 위치 이동, 구름 칸 물의 양 1 증가
+				cloud.r = (n + cloud.r + deltas[d][0] * (move[i][1] % n)) % n;
+				cloud.c = (n + cloud.c + deltas[d][1] * (move[i][1] % n)) % n;
 				
-				int r = now.r;
-				int c = now.c;
-				
-				for(int k = 0; k < l; k++) {
-					r += deltas[d][0];
-					c += deltas[d][1];
-					
-					if(r < 0)
-						r += n;
-					else if(r >= n)
-						r -= n;
-					
-					if(c < 0)
-						c += n;
-					else if(c >= n)
-						c -= n;
-				}
-				
-				q.add(new Cloud(r, c));
+				cloudPos[cloud.r][cloud.c] = true;
+				grid[cloud.r][cloud.c]++;
 			}
 			
-			for(int j = 0; j < size; j++) {
-				Cloud now = q.poll();
-				cloudPos[now.r][now.c] = true;
-				grid[now.r][now.c] += 1;
-				q.add(now);
-			}
-			
-			while(!q.isEmpty()) {
+			while(!q.isEmpty()) { // 물복사버그 마법
 				Cloud now = q.poll();
 				int cnt = 0;
-				for(int j = 0; j < 4; j++) {
-					int nr = now.r + deltas2[j][0];
-					int nc = now.c + deltas2[j][1];
+				for(int j = 1; j < 8; j += 2) {
+					int nr = now.r + deltas[j][0];
+					int nc = now.c + deltas[j][1];
 					
 					if(nr < 0 || nr >= n || nc < 0 || nc >= n)
 						continue;
@@ -105,7 +81,7 @@ public class Main {
 			
 			for(int j = 0; j < n; j++) {
 				for(int k = 0; k < n; k++) {
-					if(grid[j][k] >= 2 && !cloudPos[j][k]) {
+					if(!cloudPos[j][k] && grid[j][k] >= 2) {
 						q.add(new Cloud(j, k));
 						grid[j][k] -= 2;
 					}
