@@ -8,7 +8,7 @@ public class Main {
 	public static boolean[][] visited;
 	public static int[][] deltas = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 	
-	public static void dfsNo(int r, int c, char color) {
+	public static void dfs(int r, int c, char color) {
 		visited[r][c] = true;
 		
 		for(int i = 0; i < 4; i++) {
@@ -19,29 +19,10 @@ public class Main {
 				continue;
 			
 			if(!visited[nr][nc] && painting[nr][nc] == color)
-				dfsNo(nr, nc, color);
+				dfs(nr, nc, color);
 		}
 	}
 	
-	public static void dfsYes(int r, int c, char color) {
-		visited[r][c] = true;
-		
-		for(int i = 0; i < 4; i++) {
-			int nr = r + deltas[i][0];
-			int nc = c + deltas[i][1];
-			
-			if(nr < 0 || nr >= n || nc < 0 || nc >= n)
-				continue;
-			
-			if(!visited[nr][nc]) {
-				if(color == 'B' && painting[nr][nc] == color)
-					dfsYes(nr, nc, color);
-				else if(color != 'B' && painting[nr][nc] != 'B')
-					dfsYes(nr, nc, painting[nr][nc]);
-			}
-		}
-	}
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
@@ -56,10 +37,17 @@ public class Main {
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++) {
 				if(!visited[i][j]) {
-					dfsNo(i, j, painting[i][j]);
+					dfs(i, j, painting[i][j]);
 					cntNo++;
 				}
 					
+			}
+		}
+		
+		for(int i = 0; i < n; i++) {
+			for(int j = 0; j < n; j++) {
+				if(painting[i][j] == 'G')
+					painting[i][j] = 'R';
 			}
 		}
 		
@@ -68,7 +56,7 @@ public class Main {
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++) {
 				if(!visited[i][j]) {
-					dfsYes(i, j, painting[i][j]);
+					dfs(i, j, painting[i][j]);
 					cntYes++;
 				}
 					
