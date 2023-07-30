@@ -15,39 +15,39 @@ public class Main {
 		int[][] snail = new int[n][n];
 		
 		int cnt = n * n;
-		int r = 0; 
+		int r = -1; 
 		int c = 0;
 		int d = 0;
 		
 		while(cnt > 0) {
-			if(r >= 0 && r < n && c >= 0 && c < n && snail[r][c] == 0) {
-				if(cnt == num) {
-					pos[0] = r + 1;
-					pos[1] = c + 1;
-				}
-				snail[r][c] = cnt--;
-			}
-			else {
-				r -= deltas[d][0];
-				c -= deltas[d][1];
+			int nr = r + deltas[d][0];
+			int nc = c + deltas[d][1];
+			
+			if(nr < 0 || nr >= n || nc < 0 || nc >= n || snail[nr][nc] != 0) {
 				d = (d + 1) % 4;
+				continue;
+			}
+
+			if(cnt == num) {
+				pos[0] = nr + 1;
+				pos[1] = nc + 1;
 			}
 			
-			r += deltas[d][0];
-			c += deltas[d][1];
+			snail[nr][nc] = cnt--;
+
+			r = nr;
+			c = nc;
 		}
 		
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++)
 				sb.append(snail[i][j] + " ");
 			
-			if(i == n - 1)
-				break;
 			sb.append("\n");
 		}
 		
+		sb.append(pos[0] + " " + pos[1]);
 		System.out.println(sb);
-		System.out.println(pos[0] + " " + pos[1]);
 	}
 
 }
