@@ -12,13 +12,8 @@ public class Solution {
 	public static int max;
 	public static int[] answer;
 	
-	public static void permutation(int r, int[] output) {
+	public static void permutation(int r, int[] output, int[] sum) {
 		if(r == n) {
-			int[] sum = new int[n + 1];
-			
-			for(int i = 1; i <= n; i++)
-				sum[i] = sum[i - 1] + output[i - 1];
-			
 			for(int i = 0; i < question.length; i++) {
 				if(question[i][2] != (sum[question[i][1]] - sum[question[i][0] - 1]))
 					return;
@@ -36,7 +31,8 @@ public class Solution {
 		
 		for(int i = 0; i <= x; i++) {
 			output[r] = i;
-			permutation(r + 1, output);
+			sum[r + 1] = sum[r] + i;
+			permutation(r + 1, output, sum);
 		}
 	}
 
@@ -65,7 +61,7 @@ public class Solution {
 			max = Integer.MIN_VALUE;
 			answer = new int[n];
 			
-			permutation(0, new int[n]);
+			permutation(0, new int[n], new int[n + 1]);
 			
 			sb.append("#").append(tc).append(" ");
 			
