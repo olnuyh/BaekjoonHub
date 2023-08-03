@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 public class Main {
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
+	static Queue<int []> q;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -42,7 +43,7 @@ public class Main {
 					}
 				}
 			}else { // 폭탄 모두 폭발
-				Queue<int []> q = new LinkedList<>();
+				q = new LinkedList<>();
 				
 				for(int i = 0; i < r; i++) {
 					for(int j = 0; j < c; j++) {
