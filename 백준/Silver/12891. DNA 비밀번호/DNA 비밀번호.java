@@ -1,67 +1,46 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Main{
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int s = sc.nextInt();
-		int p = sc.nextInt();
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		char[] dna = (sc.next()).toCharArray();
-		int min_a = sc.nextInt();
-		int min_c = sc.nextInt();
-		int min_g = sc.nextInt();
-		int min_t = sc.nextInt();
+		String temp = "ACGT";
 		
-		int now_a = 0;
-		int now_c = 0;
-		int now_g = 0;
-		int now_t = 0;
+		int s = Integer.parseInt(st.nextToken());
+		int p = Integer.parseInt(st.nextToken());
 		
-		for(int i = 0; i < p; i++) {
-			if(dna[i] == 'A')
-				now_a++;
-			else if(dna[i] == 'C')
-				now_c++;
-			else if(dna[i] == 'G')
-				now_g++;
-			else
-				now_t++;		
+		String str = br.readLine();
+	
+		st = new StringTokenizer(br.readLine());
+		int[] standard = new int[4];
+		for(int i = 0; i < 4; i++)
+			standard[i] = Integer.parseInt(st.nextToken());
+		
+		int[] cnt = new int[4];
+		
+		for(int i = 0; i < p; i++)
+			cnt[temp.indexOf(str.charAt(i))]++;
+		
+		int answer = 0;
+		
+		if(cnt[0] >= standard[0] && cnt[1] >= standard[1] && cnt[2] >= standard[2] && cnt[3] >= standard[3])
+			answer++;
+		
+		for(int i = p; i < s; i++) {
+			cnt[temp.indexOf(str.charAt(i))]++;
+			cnt[temp.indexOf(str.charAt(i - p))]--;
+			
+			if(cnt[0] >= standard[0] && cnt[1] >= standard[1] && cnt[2] >= standard[2] && cnt[3] >= standard[3])
+				answer++;
 		}
 		
-		int count = 0;
-		
-		if(now_a >= min_a && now_c >= min_c && now_g >= min_g && now_t >= min_t)
-			count++;
-		
-		int start = 0;
-		int end = p - 1;
-		
-		while(end < s - 1) {
-			if(dna[start] == 'A')
-				now_a--;
-			else if(dna[start] == 'C')
-				now_c--;
-			else if(dna[start] == 'G')
-				now_g--;
-			else
-				now_t--;
-			
-			start++;
-			end++;
-			
-			if(dna[end] == 'A')
-				now_a++;
-			else if(dna[end] == 'C')
-				now_c++;
-			else if(dna[end] == 'G')
-				now_g++;
-			else
-				now_t++;
-			
-			if(now_a >= min_a && now_c >= min_c && now_g >= min_g && now_t >= min_t) {
-				count++;
-			}
-		}
-		System.out.println(count);
+		System.out.println(answer);
 	}
+
 }
