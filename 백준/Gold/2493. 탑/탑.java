@@ -22,18 +22,19 @@ public class Main {
 		
 		int[] reception = new int[n];
 		
-		for(int i = 0; i < n; i++) {
-			while(!stack.isEmpty() && height[stack.peek()] < height[i])
-				stack.pop();
-			
-			if(!stack.isEmpty())
-				reception[i] = stack.peek() + 1;
+		for(int i = n - 1; i >= 0; i--) {
+			while(!stack.isEmpty() && height[stack.peek()] <= height[i])
+				reception[stack.pop()] = i + 1;
 
 			stack.push(i);
 		}
 
+		StringBuilder sb = new StringBuilder();
+		
 		for(int i = 0; i < n; i++)
-			System.out.print(reception[i] + " ");
+			sb.append(reception[i] + " ");
+		
+		System.out.println(sb);
 	}
 
 }
