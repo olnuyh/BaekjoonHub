@@ -9,31 +9,20 @@ public class Main {
 
 		int n = Integer.parseInt(br.readLine());
 		
-		int[] D = new int[n + 1];
+		int cnt = 0;
 		
-		for(int i = 0; i <= n; i++)
-			D[i] = -1;
-		
-		D[3] = 1;
-		
-		if(n >= 5)
-			D[5] = 1;
-		
-		for(int i = 6; i <= n; i++) {
-			int a = Integer.MAX_VALUE;
-			int b = Integer.MAX_VALUE;
+		while(true) {
+			if(n % 5 == 0) {
+				System.out.println(n / 5 + cnt);
+				break;
+			}else if(n < 0) {
+				System.out.println(-1);
+				break;
+			}
 			
-			if(D[i - 3] != -1)
-				a = D[i - 3] + 1;
-			if(D[i - 5] != -1)
-				b = D[i - 5] + 1;
-
-			if(a == Integer.MAX_VALUE && b == Integer.MAX_VALUE) continue;
-			
-			D[i] = Math.min(a, b);
+			n -= 3;
+			cnt++;
 		}
-		
-		System.out.println(D[n]);
 	}
 
 }
