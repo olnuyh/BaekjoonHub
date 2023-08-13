@@ -6,26 +6,22 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static boolean[] isSelected;
+	public static int[] selected;
 	public static ArrayList<int[]> house;
 	public static ArrayList<int[]> chickenHouse;
 	public static int chickenDistance;
 	public static int minChickenDistance;
 	public static int m;
 	
-	public static void sub(int cnt, int selectedCnt) {
-		if(cnt == chickenHouse.size()) {
-			if(selectedCnt == 0 || selectedCnt > m) return;
-			
+	public static void comb(int cnt, int start) {
+		if(cnt == m) {
 			chickenDistance = 0;
 			for(int i = 0; i < house.size(); i++) {
 				int dist = Integer.MAX_VALUE;
-				for(int j = 0; j < chickenHouse.size(); j++) {
-					if(isSelected[j]) {
-						int[] h = house.get(i);
-						int[] c = chickenHouse.get(j);
-						dist = Math.min(dist, Math.abs(h[0] - c[0]) + Math.abs(h[1] - c[1]));
-					}
+				for(int j = 0; j < m; j++) {
+					int[] h = house.get(i);
+					int[] c = chickenHouse.get(selected[j]);
+					dist = Math.min(dist, Math.abs(h[0] - c[0]) + Math.abs(h[1] - c[1]));
 				}
 				chickenDistance += dist;
 			}
@@ -34,10 +30,10 @@ public class Main {
 			return;
 		}
 		
-		isSelected[cnt] = true;
-		sub(cnt + 1, selectedCnt + 1);
-		isSelected[cnt] = false;
-		sub(cnt + 1, selectedCnt);
+		for(int i = start; i < chickenHouse.size(); i++) {
+			selected[cnt] = i;
+			comb(cnt + 1, i + 1);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -61,9 +57,9 @@ public class Main {
 			}
 		}
 		
-		minChickenDistance = Integer.MAX_VALUE;
-		isSelected = new boolean[chickenHouse.size()];
-		sub(0, 0);
+		minChickenDistance = Integer.MAX_VALUE;		
+		selected = new int[m];
+		comb(0, 0);
 		
 		System.out.println(minChickenDistance);
 	}
