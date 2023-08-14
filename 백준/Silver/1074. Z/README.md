@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 31256 KB, 시간: 52 ms
+메모리: 11492 KB, 시간: 80 ms
 
 ### 분류
 
@@ -26,7 +26,7 @@
 
 <p>다음은 N=3일 때의 예이다.</p>
 
-<p style="text-align:center"><img alt="" src="" style="width: 533px; height: 535px;"></p>
+<p style="text-align:center"><img alt="" src="https://upload.acmicpc.net/d3e84bb7-9424-4764-ad3a-811e7fcbd53f/-/preview/" style="width: 533px; height: 535px;"></p>
 
 ### 입력 
 
