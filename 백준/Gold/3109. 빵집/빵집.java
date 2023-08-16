@@ -9,11 +9,10 @@ public class Main {
 	public static int r, c;
 	public static int[] dr = {-1, 0, 1};
 	public static char[][] map;
-	public static boolean[][] visited;
 	public static int pipeline;
 	
 	public static void dfs(int sr, int sc) {
-		visited[sr][sc] = true;
+		map[sr][sc] = 'x';
 		
 		if(sc == c - 1) {		
 			pipeline++;
@@ -30,7 +29,7 @@ public class Main {
 			
 			if(cnt != pipeline) return;
 			
-			if(!visited[nr][nc] && map[nr][nc] == '.') 
+			if(map[nr][nc] == '.') 
 				dfs(nr, nc);
 		}
 	}
@@ -50,7 +49,6 @@ public class Main {
 				map[i][j] = temp.charAt(j);
 		}
 		
-		visited = new boolean[r][c];
 		pipeline = 0;
 		
 		for(int i = 0; i < r; i++)
