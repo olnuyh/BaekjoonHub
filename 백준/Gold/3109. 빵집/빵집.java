@@ -11,15 +11,11 @@ public class Main {
 	public static char[][] map;
 	public static int pipeline;
 	
-	public static void dfs(int sr, int sc) {
-		map[sr][sc] = 'x';
-		
+	public static boolean dfs(int sr, int sc) {		
 		if(sc == c - 1) {		
 			pipeline++;
-			return;
+			return true;
 		}
-		
-		int cnt = pipeline;
 		
 		for(int i = 0; i < 3; i++) {
 			int nr = sr + dr[i];
@@ -27,11 +23,14 @@ public class Main {
 			
 			if(nr < 0 || nr >= r || nc < 0 || nc >= c) continue;
 			
-			if(cnt != pipeline) return;
+			if(map[nr][nc] == 'x') continue;
 			
-			if(map[nr][nc] == '.') 
-				dfs(nr, nc);
+			map[nr][nc] = 'x';
+
+			if(dfs(nr, nc)) return true;
 		}
+		
+		return false;
 	}
 
 	public static void main(String[] args) throws IOException {
