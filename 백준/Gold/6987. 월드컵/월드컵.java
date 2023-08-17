@@ -27,7 +27,7 @@ public class Main {
 		int country2 = battle[cnt][1];
 		
 		// country1이 승리(country2가 패배)
-		if(result[country1][0] >= 0 && result[country2][2] >= 0) {
+		if(result[country1][0] > 0 && result[country2][2] > 0) {
 			result[country1][0]--;
 			result[country2][2]--;
 			match(cnt + 1);
@@ -36,7 +36,7 @@ public class Main {
 		}
 		
 		// country1과 country2가 무승부
-		if(result[country1][1] >= 0 && result[country2][1] >= 0) {
+		if(result[country1][1] > 0 && result[country2][1] > 0) {
 			result[country1][1]--;
 			result[country2][1]--;
 			match(cnt + 1);
@@ -45,7 +45,7 @@ public class Main {
 		}
 		
 		// country2가 승리(country1이 패배)
-		if(result[country1][2] >= 0 && result[country2][0] >= 0) {
+		if(result[country1][2] > 0 && result[country2][0] > 0) {
 			result[country1][2]--;
 			result[country2][0]--;
 			match(cnt + 1);
