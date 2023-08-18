@@ -5,31 +5,11 @@ import java.util.StringTokenizer;
 
 public class Main {
 	public static int r, c;
-	public static int maxMove;
-	public static char[][] alphabets;
 	public static int[] dr = {-1, 1, 0, 0};
 	public static int[] dc = {0, 0, -1, 1};
-	public static boolean[] isIn;
-
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-	
-		r = Integer.parseInt(st.nextToken());
-		c = Integer.parseInt(st.nextToken());
-		
-		alphabets = new char[r][];
-		
-		for(int i = 0; i < r; i++)
-			alphabets[i] = br.readLine().toCharArray();
-		
-		maxMove = Integer.MIN_VALUE;
-		isIn = new boolean[26];
-		isIn[alphabets[0][0] - 'A'] = true;
-		
-		dfs(0, 0, 1);
-		System.out.println(maxMove);
-	}
+	public static int[][] board;
+	public static boolean[] visited;
+	public static int maxMove;
 	
 	public static void dfs(int sr, int sc, int cnt) {
 		for(int i = 0; i < 4; i++) {
@@ -38,15 +18,37 @@ public class Main {
 			
 			if(nr < 0 || nr >= r || nc < 0 || nc >= c) continue;
 			
-			if(isIn[alphabets[nr][nc] - 'A']) continue;
+			if(visited[board[nr][nc]]) continue;
 			
-			isIn[alphabets[nr][nc] - 'A'] = true;
+			visited[board[nr][nc]] = true;
 			dfs(nr, nc, cnt + 1);
-			isIn[alphabets[nr][nc] - 'A'] = false;
+			visited[board[nr][nc]] = false;
 		}
 		
 		maxMove = Math.max(maxMove, cnt);
 		return;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		r = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
+		
+		board = new int[r][c];
+		
+		for(int i = 0; i < r; i++) {
+			String str = br.readLine();
+			for(int j = 0; j < c; j++)
+				board[i][j] = str.charAt(j) - 'A';
+		}
+		
+		visited = new boolean[26];
+		visited[board[0][0]] = true;
+		maxMove = 1;
+		dfs(0, 0, 1);
+		System.out.println(maxMove);
 	}
 
 }
