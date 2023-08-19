@@ -7,10 +7,12 @@ import java.util.StringTokenizer;
 public class Main {
 	public static int n, m;
 	public static int[] arr;
+	public static StringBuilder sb;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		sb = new StringBuilder();
 		
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
@@ -24,13 +26,15 @@ public class Main {
 		Arrays.sort(arr);
 		
 		comb(0, 0, new int[m]);
+		
+		System.out.println(sb);
 	}
 
 	public static void comb(int cnt, int start, int[] choosed) {
 		if(cnt == m) {
 			for(int i = 0; i < m; i++)
-				System.out.print(choosed[i] + " ");
-			System.out.println();
+				sb.append(choosed[i] + " ");
+			sb.append("\n");
 			return;
 		}
 		
