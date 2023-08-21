@@ -1,21 +1,15 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
-class Task implements Comparable<Task>{
-	int score, start, end;
+class Task{
+	int score, time;
 	
-	public Task(int score, int start, int end) { 
+	public Task(int score, int time) { 
 		this.score = score; 
-		this.start = start;
-		this.end = end; 
-	}
-
-	@Override
-	public int compareTo(Task o) {
-		return o.start - this.start;
+		this.time = time;
 	}
 }
 
@@ -27,31 +21,32 @@ public class Main {
 		
 		int n = Integer.parseInt(br.readLine()); 
 		
-		PriorityQueue<Task> pq = new PriorityQueue<>();
+		Stack<Task> stack = new Stack<>();
+		int result = 0;
 		
 		for(int i = 1; i <= n; i++) {
 			st = new StringTokenizer(br.readLine());
 			int c = Integer.parseInt(st.nextToken()); 
 			
-			if(c == 0) continue;
+			if(c == 0) {
+				if(stack.isEmpty()) continue;
+				
+				Task task = stack.pop();
+				if(task.time - 1 == 0)
+					result += task.score;
+				else
+					stack.push(new Task(task.score, task.time - 1));
+				
+				continue;
+			}
 			
 			int a = Integer.parseInt(st.nextToken()); 
 			int t = Integer.parseInt(st.nextToken()); 
 			
-			pq.offer(new Task(a, i, t)); 
-		}
-		
-		int result = 0; 
-		int busy = 0; 
-		
-		while(!pq.isEmpty()) { 
-			Task task = pq.poll(); 
-			
-			if(n - (task.start - 1 + busy) >= task.end) {
-				result += task.score; 
-				busy += task.end; 
-			}else 
-				busy += n - (task.start - 1 + busy);
+			if(t == 1)
+				result += a;
+			else
+				stack.push(new Task(a, t - 1));
 		}
 		
 		System.out.println(result); 
