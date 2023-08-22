@@ -23,6 +23,12 @@ public class Main {
 	
 	public static int[] dr = {-1, 1, 0, 0};
 	public static int[] dc = {0, 0, -1, 1};
+	
+	public static int[][] cctv1 = {{0}, {1}, {2}, {3}};
+	public static int[][] cctv2 = {{0, 1}, {2, 3}};
+	public static int[][] cctv3 = {{0, 3}, {0, 2}, {2, 1}, {3, 1}};
+	public static int[][] cctv4 = {{0, 2, 3}, {0, 2, 1}, {1, 2, 3}, {0, 1, 3}};
+	public static int[][] cctv5 = {{0, 1, 2, 3}};
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -66,63 +72,43 @@ public class Main {
 		
 		switch(cctv.type) {
 			case 1:
-				for(int i = 0; i < 4; i++) {
-					check(cctv.r, cctv.c, new int[] {i}, cnt + 1);
+				for(int i = 0; i < cctv1.length; i++) {
+					check(cctv.r, cctv.c, cctv1[i], cnt + 1);
 					monitor(cnt + 1);
-					revert(cctv.r, cctv.c, new int[] {i}, cnt + 1);
-				}					
+					revert(cctv.r, cctv.c, cctv1[i], cnt + 1);
+				}				
 				break;
 				
 			case 2:
-				check(cctv.r, cctv.c, new int[] {0, 1}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 1}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {2, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {2, 3}, cnt + 1);
+				for(int i = 0; i < cctv2.length; i++) {
+					check(cctv.r, cctv.c, cctv2[i], cnt + 1);
+					monitor(cnt + 1);
+					revert(cctv.r, cctv.c, cctv2[i], cnt + 1);
+				}				
 				break;
 				
 			case 3:
-				check(cctv.r, cctv.c, new int[] {0, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 3}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {0, 2}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 2}, cnt + 1);
-
-				check(cctv.r, cctv.c, new int[] {2, 1}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {2, 1}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {3, 1}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {3, 1}, cnt + 1);
+				for(int i = 0; i < cctv3.length; i++) {
+					check(cctv.r, cctv.c, cctv3[i], cnt + 1);
+					monitor(cnt + 1);
+					revert(cctv.r, cctv.c, cctv3[i], cnt + 1);
+				}				
 				break;
 				
 			case 4:
-				check(cctv.r, cctv.c, new int[] {0, 2, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 2, 3}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {0, 2, 1}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 2, 1}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {1, 2, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {1, 2, 3}, cnt + 1);
-				
-				check(cctv.r, cctv.c, new int[] {0, 1, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 1, 3}, cnt + 1);
+				for(int i = 0; i < cctv4.length; i++) {
+					check(cctv.r, cctv.c, cctv4[i], cnt + 1);
+					monitor(cnt + 1);
+					revert(cctv.r, cctv.c, cctv4[i], cnt + 1);
+				}				
 				break;
 				
 			case 5:
-				check(cctv.r, cctv.c, new int[] {0, 1, 2, 3}, cnt + 1);
-				monitor(cnt + 1);
-				revert(cctv.r, cctv.c, new int[] {0, 1, 2, 3}, cnt + 1);
+				for(int i = 0; i < cctv5.length; i++) {
+					check(cctv.r, cctv.c, cctv5[i], cnt + 1);
+					monitor(cnt + 1);
+					revert(cctv.r, cctv.c, cctv5[i], cnt + 1);
+				}				
 				break;
 		}
 	}
