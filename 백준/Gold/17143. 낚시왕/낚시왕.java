@@ -100,6 +100,12 @@ public class Main {
 			int dir = 1; // 원래 방향인지 반대 방향인지 표시
 			int move = shark.s; // 상어가 이동해야 하는 칸 수
 			
+			// 상어가 이동하다 자기 자리로 돌아오기를 반복하는 것을 방지
+			if(shark.d == 0 || shark.d == 1)
+				move %= 2 * (R - 1);
+			else if(shark.d == 2 || shark.d == 3)
+				move %= 2 * (C - 1);
+			
 			int nr = shark.r;
 			int nc = shark.c; // 이동한 위치 표시
 			
