@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 	public static int[][] arr;
-	public static int n, m;
+	public static int n, m, r;
 	
 	public static int[] dr = {0, 1, 0, -1};
 	public static int[] dc = {1, 0, -1, 0};
@@ -17,7 +17,7 @@ public class Main {
 		
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		int r = Integer.parseInt(st.nextToken());
+		r = Integer.parseInt(st.nextToken());
 
 		arr = new int[n][m];
 		for(int i = 0; i < n; i++) {
@@ -26,7 +26,15 @@ public class Main {
 				arr[i][j] = Integer.parseInt(st.nextToken());
 		}
 		
-		rotation(r);
+		int nowN = n;
+		int nowM = m;
+		
+		for(int i = 0; i < Math.min(n, m) / 2; i++) {
+			
+			rotation(i, 2 * (nowN + nowM - 2));
+			nowN -= 2;
+			nowM -= 2;
+		}
 		
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < m; j++)
@@ -37,50 +45,33 @@ public class Main {
 		System.out.println(sb);
 	}
 
-	public static void rotation(int r) {
-		int startR = 0;
-		int startC = 0;
+	public static void rotation(int start, int len) {
+		int k = r % len;
 		
-		int endR = n - 1;
-		int endC = m - 1;
-		
-		while(startR < endR && startC < endC) {
-			int lap = 2 * (endC - startC + endR - startR);
-			int k = r % (2 * lap);
+		for(int i = 0; i < k; i++) {
+			int temp = arr[start][start];
+			int curR = start;
+			int curC = start;
+			int d = 0;
 			
-			for(int i = 0; i < k; i++) {
-				int temp = arr[startR][startC];
-				int curR = startR;
-				int curC = startC;
+			while(d < 4) {
+				int nr = curR + dr[d];
+				int nc = curC + dc[d];
 				
-				int d = 0;
-				while(true) {
-					int nr = curR + dr[d];
-					int nc = curC + dc[d];
-					
-					if(nr < startR || nr > endR || nc < startC || nc > endC) {
-						d += 1;
-						
-						if(d == 4)
-							break;
-						
-						nr = curR + dr[d];
-						nc = curC + dc[d];
-					}
-					
-					arr[curR][curC] = arr[nr][nc];
-					curR = nr;
-					curC = nc;
+				if(nr == start && nc == start)
+					break;
+				
+				if(nr < start || nr >= n - start || nc < start || nc >= m - start) {
+					d++;
+					continue;
 				}
 				
-				arr[startR + 1][startC] = temp;
-				
+				arr[curR][curC] = arr[nr][nc];
+				curR = nr;
+				curC = nc;
 			}
 			
-			startR++;
-			startC++;
-			endR--;
-			endC--;
+			arr[start + 1][start] = temp;
 		}
 	}
 }
