@@ -42,7 +42,9 @@ public class Main {
 		dfs(r);
 		
 		for(int i = 1; i <= n; i++)
-			System.out.println(visited[i]);
+			sb.append(visited[i] + "\n");
+		
+		System.out.println(sb);
 	}
 	
 	public static void dfs(int vertex) {
