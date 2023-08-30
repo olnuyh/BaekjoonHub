@@ -12,7 +12,6 @@ public class Main {
 	public static int[] dc = {0, 0, -1, 1};
 	public static int[][] map;
 	public static int[][][] visited;
-	public static int minDistance;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,12 +28,10 @@ public class Main {
 				map[i][j] = str.charAt(j) - '0';
 		}
 		
-		minDistance = Integer.MAX_VALUE;
 		// 벽을 부순 경우와 벽을 부수지 않은 경우를 둘 다 저장하기 위해 3차원 배열 사용
 		visited = new int[2][n][m];
-		minDistance = Math.min(minDistance, bfs());
 		
-		System.out.println(minDistance);
+		System.out.println(bfs());
 	}
 
 	public static int bfs() {
