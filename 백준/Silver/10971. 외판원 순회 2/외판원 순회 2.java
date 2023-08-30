@@ -25,20 +25,18 @@ public class Main {
 		
 		minCost = Integer.MAX_VALUE;
 		
-		for(int i = 0; i < n; i++) {
-			visited = new boolean[n];
-			visited[i] = true;
-			go(1, 0, i, i);
-		}
+		visited = new boolean[n];
+		visited[0] = true;
+		go(1, 0, 0);
 		
 		System.out.println(minCost);
 	}
 
-	public static void go(int cnt, int cost, int start, int dest) {
+	public static void go(int cnt, int cost, int start) {
 		if(cnt == n) {
-			if(W[start][dest] == 0)
+			if(W[start][0] == 0)
 				return;
-			minCost = Math.min(minCost, cost + W[start][dest]);
+			minCost = Math.min(minCost, cost + W[start][0]);
 			return;
 		}
 		
@@ -48,7 +46,7 @@ public class Main {
 		for(int i = 0; i < n; i++) {
 			if(!visited[i] && W[start][i] != 0) {
 				visited[i] = true;
-				go(cnt + 1, cost + W[start][i], i, dest);
+				go(cnt + 1, cost + W[start][i], i);
 				visited[i] = false;
 			}
 		}
