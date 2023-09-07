@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -20,7 +20,7 @@ public class Main {
 		for(int i = 0; i < N; i++)
 			num[i] = str.charAt(i) - '0';
 		
-		Stack<Integer> stack = new Stack<>();
+		Deque<Integer> stack = new ArrayDeque<>();
 		int cnt = 0;
 		
 		for(int i = 0; i < N; i++) {
@@ -41,9 +41,9 @@ public class Main {
 		}
 		
 		while(!stack.isEmpty())
-			sb.append(num[stack.pop()]);
+			sb.append(num[stack.pollLast()]);
 		
-		System.out.println(sb.reverse());
+		System.out.println(sb);
 	}
 
 }
