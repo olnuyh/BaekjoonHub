@@ -1,13 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 class FineDust{
 	int r, c, amount;
 	
-	public FineDust(int r, int c, int amount){
+	public FineDust(int r, int c, int amount) {
 		this.r = r;
 		this.c = c;
 		this.amount = amount;
@@ -15,113 +16,132 @@ class FineDust{
 }
 
 public class Main {
-	public static int r, c;
-	public static int airR;
-	public static int[][] house;
-	
-	public static boolean isIn(int nr, int nc, boolean up) {
-		if(up) {
-			return nr >= 0 && nr < airR && nc >= 0 && nc < c;
-		}
-		else {
-			return nr >= airR && nr < r && nc >= 0 && nc < c;
-		}
-	}
-	
-	// 공기 청정기
-	public static void airCleaner(int nr, int[][] deltas, boolean up) { 
-		int nowR = nr;
-		int nowC = 0;
-		int d = 0;
-		
-		while(true) { 
-			int nextR = nowR + deltas[d][0];
-			int nextC = nowC + deltas[d][1];
-			
-			if(isIn(nextR, nextC, up)){
-				int temp = house[nextR][nextC];
-				if(temp == -1) {
-					house[nowR][nowC] = 0;
-					break;
-				}
-				house[nowR][nowC] = house[nextR][nextC];
-			}
-			else {
-				d++;
-				house[nowR][nowC] = house[nowR + deltas[d][0]][nowC + deltas[d][1]];
-			}
-			
-			nowR += deltas[d][0];
-			nowC += deltas[d][1];
-		}
-	}
+	public static int[][] deltas1 = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+	public static int[][] deltas2 = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+	public static Queue<FineDust> fineDustList;
+	public static int[][] room;
+	public static int R, C;
+	public static int[][] cleaner;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer stk = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		r = Integer.parseInt(stk.nextToken());
-		c = Integer.parseInt(stk.nextToken());
-		int t = Integer.parseInt(stk.nextToken());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(st.nextToken());
+
+		fineDustList = new ArrayDeque<>();
+		room = new int[R][C];
 		
-		house = new int[r][c];
+		cleaner = new int[2][];
+		int tmp = 0;
 		
-		for(int i = 0; i < r; i++){
-			stk = new StringTokenizer(br.readLine());
-			for(int j = 0; j < c; j++) {
-				int temp = Integer.parseInt(stk.nextToken());
-				if(temp == -1)
-					airR = i;
-				house[i][j] = temp;
+		for(int i = 0; i < R; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j = 0; j < C; j++) {
+				int val = Integer.parseInt(st.nextToken());
+				if(val > 0)
+					fineDustList.offer(new FineDust(i, j, val));
+				else if(val == -1) {
+					room[i][j] = -1;
+					cleaner[tmp++] = new int[] {i, j};
+				}
 			}
 		}
 		
-		int[][] deltas1 = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // 미세먼지 확산, 위쪽 공기 청정기
-		int[][] deltas2 = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}}; // 아래쪽 공기 청정기
-		
-		for(int i = 0; i < t; i++) { // t초 후 상태(t번 반복)
-			// 1. 미세먼지 확산
-			ArrayList<FineDust> list = new ArrayList<>();
+		for(int i = 0; i < T; i++) {
+			// 미세먼지 확산
+			spread();
 			
-			for(int j = 0; j < r; j++) {
-				for(int k = 0; k < c; k++) {
-					if(house[j][k] > 0)
-						list.add(new FineDust(j, k, house[j][k]));
-				}
-			}
+			// 공기청정기 청소
+			clean();
 			
-			for(int j = 0; j < list.size(); j++) {
-				int nowR = list.get(j).r;
-				int nowC = list.get(j).c;
-				int dustAmount = list.get(j).amount;
-				
-				int count = 0;
-				for(int k = 0; k < 4; k++) {
-					int nextR = nowR + deltas1[k][0];
-					int nextC = nowC + deltas1[k][1];
-					
-					if(nextR >= 0 && nextR < r && nextC >= 0 && nextC < c && house[nextR][nextC] >= 0) {
-						count++;
-						house[nextR][nextC] += dustAmount / 5;
+			for(int j = 0; j < R; j++) {
+				for(int k = 0; k < C; k++) {
+					if(room[j][k] > 0) {
+						fineDustList.offer(new FineDust(j, k, room[j][k]));
+						room[j][k] = 0;
 					}
 				}
-				house[nowR][nowC] -= dustAmount / 5 * count;
-			}
-			
-			// 2. 공기청정기 작동
-			airCleaner(airR - 2, deltas1, true);// 위쪽
-			airCleaner(airR + 1, deltas2, false); // 아래쪽
-		}
-		
-		int total = 0;
-		for(int i = 0; i < r; i++) {
-			for(int j = 0; j < c; j++) {
-				if(house[i][j] > 0)
-					total += house[i][j];
 			}
 		}
 		
-		System.out.println(total);
+		int leftAmount = 0;
+		while(!fineDustList.isEmpty())
+			leftAmount += fineDustList.poll().amount;
+		
+		System.out.println(leftAmount);
 	}
 
+	public static void spread() {
+		while(!fineDustList.isEmpty()) {
+			FineDust cur = fineDustList.poll();
+			int cnt = 0;
+			// 확산되는 개수 세기
+			for(int d = 0; d < 4; d++) {
+				int nr = cur.r + deltas1[d][0];
+				int nc = cur.c + deltas1[d][1];
+				
+				if(nr < 0 || nr >= R || nc < 0 || nc >= C || room[nr][nc] == -1) continue;
+				cnt++;
+			}
+			
+			// 미세먼지 확산
+			for(int d = 0; d < 4; d++) {
+				int nr = cur.r + deltas1[d][0];
+				int nc = cur.c + deltas1[d][1];
+				
+				if(nr < 0 || nr >= R || nc < 0 || nc >= C || room[nr][nc] == -1) continue;
+				room[nr][nc] += cur.amount / 5;
+			}
+			
+			room[cur.r][cur.c] += cur.amount - (cur.amount / 5) * cnt;
+		}
+	}
+	
+	public static void clean() {
+		// 위쪽 공기청정기 청소
+		int r = cleaner[0][0] - 1;
+		int c = cleaner[0][1];
+		
+		int d = 0;
+		while(d < 4) {
+			int nr = r + deltas1[d][0];
+			int nc = c + deltas1[d][1];
+			
+			if(nr < 0 || nr > cleaner[0][0] || nc < 0 || nc >= C) {
+				d++;
+				continue;
+			}
+			
+			room[r][c] = room[nr][nc];
+			r = nr;
+			c = nc;
+		}
+		
+		room[cleaner[0][0]][cleaner[0][1] + 1] = 0;
+		
+		// 아래쪽 공기청정기 청소
+		r = cleaner[1][0] + 1;
+		c = cleaner[1][1];
+		
+		d = 0;
+		while(d < 4) {
+			int nr = r + deltas2[d][0];
+			int nc = c + deltas2[d][1];
+			
+			if(nr < cleaner[1][0] || nr >= R || nc < 0 || nc >= C) {
+				d++;
+				continue;
+			}
+			
+			room[r][c] = room[nr][nc];
+			r = nr;
+			c = nc;
+		}
+		
+		room[cleaner[1][0]][cleaner[1][1] + 1] = 0;
+	}
 }
