@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		int N = Integer.parseInt(br.readLine());
+		
+		int[] trees = new int[N];
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i = 0; i < N; i++)
+			trees[i] = Integer.parseInt(st.nextToken());
+		
+		int one = 0;
+		int two = 0;
+		
+		for(int i = 0; i < N; i++) {
+			one += trees[i] % 2;
+			two += trees[i] / 2;
+		}
+		
+		while(one < two) {
+			one += 2;
+			two--;
+		}
+		
+		if(one == two)
+			System.out.println("YES");
+		else
+			System.out.println("NO");
+	}
+
+}
