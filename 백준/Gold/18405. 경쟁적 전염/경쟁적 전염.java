@@ -1,29 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static class Virus implements Comparable<Virus> {
+    static class Virus {
         int r, c, type;
 
         public Virus(int r, int c, int type){
             this.r = r;
             this.c = c;
             this.type = type;
-        }
-
-        @Override
-        public int compareTo(Virus o) {
-            if(this.type == o.type){
-                if(this.r == o.r)
-                    return this.c - o.c;
-                return this.r - o.r;
-            }
-            return this.type - o.type;
         }
     }
 
@@ -38,15 +25,24 @@ public class Main {
         int K = Integer.parseInt(st.nextToken());
 
         int[][] tube = new int[N][N];
-        PriorityQueue<Virus> pq = new PriorityQueue<>();
+        ArrayList<Virus> list = new ArrayList<>();
 
         for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < N; j++) {
                 tube[i][j] = Integer.parseInt(st.nextToken());
-                pq.add(new Virus(i, j, tube[i][j]));
+                if(tube[i][j] != 0)
+                    list.add(new Virus(i, j, tube[i][j]));
             }
         }
+
+        Collections.sort(list, (o1, o2) -> {
+             return o1.type - o2.type;
+        });
+
+        Queue<Virus> q = new ArrayDeque<>();
+        for(Virus v : list)
+            q.offer(v);
 
         st = new StringTokenizer(br.readLine());
         int S = Integer.parseInt(st.nextToken());
@@ -54,9 +50,10 @@ public class Main {
         int Y = Integer.parseInt(st.nextToken()) - 1;
 
         for(int t = 0; t < S; t++){
-            Queue<Virus> q = new ArrayDeque<>();
-            while(!pq.isEmpty()){
-                Virus now = pq.poll();
+            list = new ArrayList<>();
+
+            while(!q.isEmpty()){
+                Virus now = q.poll();
                 for(int d = 0; d < 4; d++){
                     int nr = now.r + dr[d];
                     int nc = now.c + dc[d];
@@ -66,13 +63,13 @@ public class Main {
 
                     if(tube[nr][nc] == 0){
                         tube[nr][nc] = now.type;
-                        q.offer(new Virus(nr, nc, tube[nr][nc]));
+                        list.add(new Virus(nr, nc, tube[nr][nc]));
                     }
                 }
             }
 
-            while(!q.isEmpty())
-                pq.add(q.poll());
+            for(Virus v : list)
+                q.offer(v);
         }
 
         System.out.println(tube[X][Y]);
