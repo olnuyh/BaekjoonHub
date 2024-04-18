@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 public class Main {
     public static int N;
-    public static ArrayList<ArrayList<Integer>> list;
+    public static ArrayList<Integer>[] arr;
     public static int[] parent;
 
     public static void main(String[] args) throws IOException {
@@ -17,11 +17,11 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(br.readLine());
-        list = new ArrayList<>();
-        for (int i = 0; i <= N; i++) {
-            list.add(new ArrayList<>());
-        }
+        arr = new ArrayList[N + 1];
 
+        for (int i = 0; i <= N; i++) {
+            arr[i] = new ArrayList<>();
+        }
 
         for (int i = 1; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -29,13 +29,14 @@ public class Main {
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            list.get(a).add(b);
-            list.get(b).add(a);
+            arr[a].add(b);
+            arr[b].add(a);
         }
 
         parent = new int[N + 1];
+        parent[1] = 1;
 
-        bfs();
+        dfs(1);
 
         for (int i = 2; i <= N; i++) {
             sb.append(parent[i]).append("\n");
@@ -44,23 +45,11 @@ public class Main {
         System.out.println(sb);
     }
 
-    public static void bfs() {
-        Queue<Integer> q = new ArrayDeque<>();
-        boolean[] visited = new boolean[N + 1];
-        visited[1] = true;
-        q.offer(1);
-
-        while (!q.isEmpty()) {
-            int now = q.poll();
-
-            for (int i = 0; i < list.get(now).size(); i++) {
-                int next = list.get(now).get(i);
-
-                if (!visited[next]) {
-                    visited[next] = true;
-                    q.offer(next);
-                    parent[next] = now;
-                }
+    public static void dfs(int now) {
+        for (Integer i : arr[now]) {
+            if (parent[i] == 0) {
+                parent[i] = now;
+                dfs(i);
             }
         }
     }
