@@ -11,30 +11,41 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         int[] price = new int[N];
-        int sum = 0;
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        int low = 0;
+        int high = 0;
+
         for (int i = 0; i < N; i++) {
             price[i] = Integer.parseInt(st.nextToken());
-            sum += price[i];
+            high = Integer.max(high, price[i]);
         }
-
+        
         int total = Integer.parseInt(br.readLine());
 
-        Arrays.sort(price);
+        int maxBudget = 0;
 
-        if (total >= sum) {
-            System.out.println(price[N - 1]);
-        } else {
-            for (int i = 0; i < N; i++) {
-                if (price[i] <= total / (N - i)) {
-                    total -= price[i];
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int budget = 0;
+            for (int money : price) {
+                if (money <= mid) {
+                    budget += money;
                 } else {
-                    System.out.println(total / (N - i));
-                    break;
+                    budget += mid;
                 }
             }
+
+            if (budget <= total) {
+                maxBudget = Integer.max(maxBudget, mid);
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
         }
+
+        System.out.println(maxBudget);
     }
 }
