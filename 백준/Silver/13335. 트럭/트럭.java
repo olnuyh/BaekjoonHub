@@ -7,15 +7,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static class Truck {
-        int weight, pos;
-
-        public Truck (int weight, int pos) {
-            this.weight = weight;
-            this.pos = pos;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -24,42 +15,38 @@ public class Main {
         int w = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[n];
-        st = new StringTokenizer(br.readLine());
+        Queue<Integer> bridge = new ArrayDeque<>();
 
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < w; i++) {
+            bridge.offer(0);
         }
 
-        Queue<Truck> q = new ArrayDeque<>();
+        st = new StringTokenizer(br.readLine());
 
-        int bridge = 0;
-        int idx = 0;
-        int time = 1;
+        Queue<Integer> trucks = new ArrayDeque<>();
 
-        while (true) {
-            if (idx == n && q.isEmpty()) {
-                break;
-            }
+        for (int i = 0; i < n; i++) {
+            trucks.offer(Integer.parseInt(st.nextToken()));
+        }
 
-            while (!q.isEmpty() && q.peek().pos == w) {
-                Truck truck = q.poll();
-                bridge -= truck.weight;
-            }
+        int curBridge = 0;
+        int time = 0;
 
-            for (Truck truck : q) {
-                truck.pos++;
-            }
+        while (!bridge.isEmpty()) {
+            curBridge -= bridge.poll();
 
-            if (idx < n && bridge + arr[idx] <= L) {
-                bridge += arr[idx];
-                q.offer(new Truck(arr[idx], 1));
-                idx++;
+            if (!trucks.isEmpty()) {
+                if (curBridge + trucks.peek() <= L) {
+                    curBridge += trucks.peek();
+                    bridge.offer(trucks.poll());
+                } else {
+                    bridge.offer(0);
+                }
             }
 
             time++;
         }
 
-        System.out.println(time - 1);
+        System.out.println(time);
     }
 }
