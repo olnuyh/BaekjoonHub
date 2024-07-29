@@ -5,11 +5,7 @@ class Solution {
         int pCnt = count(s, 'P');
         int yCnt = count(s, 'Y');
         
-        if (pCnt == yCnt) {
-            return true;
-        }
-
-        return false;
+        return pCnt == yCnt;
     }
     
     int count (String s, char c) {
