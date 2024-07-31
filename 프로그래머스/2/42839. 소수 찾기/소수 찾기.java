@@ -1,51 +1,51 @@
 import java.util.*;
 
 class Solution {
-    public char[] chars;
-    public HashSet<Integer> hs;
-    public boolean[] visited;
+    public static ArrayList<Integer> list;
+    public static char[] nums;
+    public static boolean[] selected;
     
     public int solution(String numbers) {
-        chars = numbers.toCharArray();
-        hs = new HashSet();
-        visited = new boolean[numbers.length()];
+        nums = numbers.toCharArray();
+        list = new ArrayList();
         
-        makeNum("", 0);
-        return hs.size();
+        selected = new boolean[numbers.length()];
+        makeNumber("", 0);
+        
+        return list.size();
     }
     
-    public void makeNum(String cur, int cnt) {
-        if (cnt == visited.length) {
+    public void makeNumber(String cur, int idx) {
+        if (idx == selected.length) {
             if (cur.equals("")) {
                 return;
             }
             
             int num = Integer.parseInt(cur);
             
-            if (check(num)) {
-                hs.add(num);
+            if (check(num) && !list.contains(num)) {
+                list.add(num);
             }
-            
             return;
         }
         
-        for (int i = 0; i < chars.length; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                makeNum(cur + chars[i], cnt + 1);
-                visited[i] = false;
-                makeNum(cur, cnt + 1);
-            }
+        for (int i = 0; i < nums.length; i++) {
+            if (!selected[i]) {
+                selected[i] = true;
+                makeNumber(cur + nums[i], idx + 1);
+                selected[i] = false;
+                makeNumber(cur, idx + 1);     
+            } 
         }
     }
     
-    public boolean check(int num) {
-        if (num < 2) {
+    public boolean check(int number) {
+        if (number <= 1) {
             return false;
-        }        
+        }
         
-        for (int i = 2; i <= (int) Math.sqrt(num); i++) {
-            if (num % i == 0) {
+        for (int i = 2; i <= (int)Math.sqrt(number); i++) {
+            if (number % i == 0) {
                 return false;
             }
         }
