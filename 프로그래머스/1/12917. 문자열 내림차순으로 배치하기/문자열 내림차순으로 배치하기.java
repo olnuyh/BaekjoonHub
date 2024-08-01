@@ -2,15 +2,9 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        String answer = "";
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
         
-        String[] str = s.split("");
-        Arrays.sort(str, Collections.reverseOrder());
-        
-        for (String ss : str) {
-            answer += ss;
-        }
-        
-        return answer;
+        return new StringBuilder(new String(chars)).reverse().toString();
     }
 }
