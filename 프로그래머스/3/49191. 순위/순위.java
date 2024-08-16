@@ -1,53 +1,48 @@
-import java.util.*;
-
 class Solution {
-    public static ArrayList<Integer>[] contest;
-    public static int[] in;
-    public static int[] out;
-    public static boolean[] visited;
-    
     public int solution(int n, int[][] results) {
-        int answer = 0;
+        int answer = n;
         
-        contest = new ArrayList[n + 1];
+        int[][] contest = new int[n + 1][n + 1];
         
         for (int i = 1; i <= n; i++) {
-            contest[i] = new ArrayList<Integer>();
+            for (int j = 1; j <= n; j++) {
+                if (i == j) {
+                    continue;
+                }
+                
+                contest[i][j] = n * n;
+            }
         }
         
         for (int i = 0; i < results.length; i++) {
             int[] result = results[i];
             
-            contest[result[0]].add(result[1]);
+            contest[result[0]][result[1]] = 1;
         }
         
-        in = new int[n + 1];
-        out = new int[n + 1];
-        
-        for (int i = 1; i <= n; i++) {
-            visited = new boolean[n + 1];
-            dfs(i, i);
+        for (int k = 1; k <= n; k++) {
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    contest[i][j] = Math.min(contest[i][j], contest[i][k] + contest[k][j]);
+                }
+            }
         }
         
         for (int i = 1; i <= n; i++) {
-            if (in[i] + out[i] == n - 1) {
-                answer++;
+            int cnt = 0;
+            
+            for (int j = 1; j <= n; j++) {
+                if (i == j) {
+                    continue;
+                }
+                
+                if (contest[i][j] == n * n && contest[j][i] == n * n) {
+                    answer--;
+                    break;
+                }
             }
         }
         
         return answer;
-    }
-    
-    public void dfs(int start, int cur) {
-        for (int i = 0; i < contest[cur].size(); i++) {
-            int next = contest[cur].get(i);
-            
-            if (!visited[next]) {
-                visited[next] = true;
-                in[next]++;
-                out[start]++;
-                dfs(start, next);
-            }
-        }
     }
 }
