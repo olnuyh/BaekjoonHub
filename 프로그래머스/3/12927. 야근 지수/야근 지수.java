@@ -10,13 +10,11 @@ class Solution {
         } 
         
         for (int i = 0; i < n; i++) {
-            if (!pq.isEmpty()) {
-                int cur = pq.poll();
-                if (cur == 1) {
-                    continue;
-                }
-                pq.offer(cur - 1);
+            int cur = pq.poll();
+            if (cur == 0) {
+                break;
             }
+            pq.offer(cur - 1);
         }
         
         while (!pq.isEmpty()) {
