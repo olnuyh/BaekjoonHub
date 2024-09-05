@@ -1,25 +1,9 @@
 class Solution {
-    public int solution(int n) {
-        int original = count(n);
-        
+    public int solution(int n) {        
         for (int i = n + 1; ; i++) {
-            if (original == count(i)) {
+            if (Integer.bitCount(n) == Integer.bitCount(i)) {
                 return i;
             }
         }
-    }
-    
-    public int count(int n) {
-        int cnt = 0;
-        
-        char[] arr = Integer.toString(n, 2).toCharArray();
-        
-        for (char c : arr) {
-            if (c == '1') {
-                cnt++;
-            }
-        }
-        
-        return cnt;
     }
 }
