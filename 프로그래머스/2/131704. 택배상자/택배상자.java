@@ -4,29 +4,21 @@ class Solution {
     public int solution(int[] order) {
         Stack<Integer> stack = new Stack();
         
-        int idx = 1;
-        int boxes = 0;
+        int idx = 0;
         
-        for (int num : order) {
-            while(idx < num) {
-                stack.push(idx++);
-            }
+        for (int i = 1; i <= order.length; i++) {
+            stack.push(i);
             
-            if (num == idx) {
-                idx++;
-                boxes++;
-                continue;
+            while (!stack.isEmpty()) {
+                if (stack.peek() == order[idx]) {
+                    stack.pop();
+                    idx++;
+                } else {
+                    break;
+                }   
             }
-            
-            if (!stack.isEmpty() && num == stack.peek()) {
-                stack.pop();
-                boxes++;
-                continue;
-            }
-            
-            break;
         }
         
-        return boxes;
+        return idx;
     }
 }
