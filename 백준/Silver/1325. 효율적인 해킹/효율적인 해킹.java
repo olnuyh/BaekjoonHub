@@ -37,17 +37,15 @@ public class Main {
             count[i] = hacking(i);
         }
 
-        List<Integer> answer = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 1; i <= N; i++) {
             if(count[i] == maxCnt) {
-                answer.add(i);
+                sb.append(i).append(" ");
             }
         }
 
-        for (int num : answer) {
-            System.out.print(num + " ");
-        }
+        System.out.println(sb);
     }
 
     public static int hacking(int start) {
