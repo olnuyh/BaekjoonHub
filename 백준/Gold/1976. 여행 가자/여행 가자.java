@@ -1,11 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static final int MAX_VALUE = 1000;
+    public static int[] parents;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,40 +13,27 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         int M = Integer.parseInt(br.readLine());
 
-        int[][] D = new int[N + 1][N + 1];
+        parents = new int[N + 1];
 
         for(int i = 1; i <= N; i++) {
-            Arrays.fill(D[i], MAX_VALUE);
+            parents[i] = i;
         }
 
         for(int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
-            for(int j = 1; j <= N; j++) {
-                int val = Integer.parseInt(st.nextToken());
 
-                if(val == 1) {
-                    D[i][j] = 1;
+            for(int j = 1; j <= N; j++) {
+                if(Integer.parseInt(st.nextToken()) == 1) {
+                    union(i, j);
                 }
             }
         }
 
         int[] route = new int[M];
-        st = new StringTokenizer(br.readLine());
 
+        st = new StringTokenizer(br.readLine());
         for(int i = 0; i < M; i++) {
             route[i] = Integer.parseInt(st.nextToken());
-        }
-
-        for(int k = 1; k <= N; k++) {
-            for(int i = 1; i <= N; i++) {
-                for(int j = 1; j <= N; j++) {
-                    if(i == k || i == j || j == k) {
-                        continue;
-                    }
-
-                    D[i][j] = Math.min(D[i][j], D[i][k] + D[k][j]);
-                }
-            }
         }
 
         boolean isPossible = true;
@@ -56,20 +42,33 @@ public class Main {
             int start = route[i];
             int end = route[i + 1];
 
-            if(start == end) {
-                continue;
-            }
-
-            if(D[start][end] == MAX_VALUE) {
+            if(find(start) != find(end)) {
                 isPossible = false;
                 break;
             }
         }
 
-        if(isPossible) {
+        if (isPossible) {
             System.out.println("YES");
-        } else{
+        } else {
             System.out.println("NO");
+        }
+    }
+
+    public static int find(int a) {
+        if(a == parents[a]) {
+            return a;
+        }
+
+        return find(parents[a]);
+    }
+
+    public static void union(int a, int b) {
+        int pA = find(a);
+        int pB = find(b);
+
+        if(pA != pB) {
+            parents[pB] = pA;
         }
     }
 }
