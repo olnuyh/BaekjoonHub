@@ -1,53 +1,59 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static int N;
+	public static int[][] deltas = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		
-		int n = sc.nextInt();
-		int num = sc.nextInt();
-		int[] pos = new int[2];
+		N = Integer.parseInt(br.readLine());
+		int M = Integer.parseInt(br.readLine());
 		
-		int[][] deltas = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+		int[][] arr = new int[N][N];
 		
-		int[][] snail = new int[n][n];
+		int num = N * N;
 		
-		int cnt = n * n;
-		int r = -1; 
+		int r = -1;
 		int c = 0;
 		int d = 0;
 		
-		while(cnt > 0) {
+		while (num > 0) {
 			int nr = r + deltas[d][0];
 			int nc = c + deltas[d][1];
 			
-			if(nr < 0 || nr >= n || nc < 0 || nc >= n || snail[nr][nc] != 0) {
+			if (isIn(nr, nc) && arr[nr][nc] == 0) {
+				arr[nr][nc] = num--;
+				r = nr;
+				c = nc;
+			} else {
 				d = (d + 1) % 4;
-				continue;
 			}
-
-			if(cnt == num) {
-				pos[0] = nr + 1;
-				pos[1] = nc + 1;
-			}
-			
-			snail[nr][nc] = cnt--;
-
-			r = nr;
-			c = nc;
 		}
 		
-		for(int i = 0; i < n; i++) {
-			for(int j = 0; j < n; j++)
-				sb.append(snail[i][j] + " ");
-			
+		int[] pos = new int[2];
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sb.append(arr[i][j]).append(" ");
+				
+				if (arr[i][j] == M) {
+					pos[0] = i + 1;
+					pos[1] = j + 1;
+				}
+			}
 			sb.append("\n");
 		}
 		
-		sb.append(pos[0] + " " + pos[1]);
+		sb.append(pos[0]).append(" ").append(pos[1]);
+		
 		System.out.println(sb);
+		
 	}
-
+	
+	public static boolean isIn (int r, int c) {
+		return r >= 0 && r < N && c >= 0 && c < N;
+	}
 }
