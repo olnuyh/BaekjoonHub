@@ -15,19 +15,13 @@ public class Main {
 
         int[][] D = new int[K + 1][N + 1];
 
-        for (int i = 0; i <= N; i++) {
-            D[1][i] = 1;
+        for (int i = 1; i <= K; i++) {
+            D[i][0] = 1;
         }
 
-        for (int i = 2; i <= K; i++) {
-            for (int j = 0; j <= N; j++) {
-                for (int k = 0; k <= N; k++) {
-                    if (j < k) {
-                        continue;
-                    }
-
-                    D[i][j] = (D[i][j] + D[i - 1][j - k]) % NUM;
-                }
+        for (int i = 1; i <= K; i++) {
+            for (int j = 1; j <= N; j++) {
+                D[i][j] = (D[i][j - 1] + D[i - 1][j]) % NUM;
             }
         }
 
