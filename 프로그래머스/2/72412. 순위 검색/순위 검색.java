@@ -1,75 +1,71 @@
 import java.util.*;
 
 class Solution {
-    public static Map<String, List<Integer>> map;
+    public Map<String, List<Integer>> map;
+    
     public int[] solution(String[] info, String[] query) {
         int[] answer = new int[query.length];
         
         map = new HashMap();
         
-        for (int i = 0; i < info.length; i++) {
-            String[] conditions = info[i].split(" ");
-            makeCases(0, "", conditions);
+        for (String str : info) {
+            String[] applicant = str.split(" ");
+            
+            makeCase(0, "", applicant);
         }
         
-        for (List<Integer> list : map.values()) {
-            Collections.sort(list);
+        for (String key : map.keySet()) {
+            Collections.sort(map.get(key));    
         }
         
         for (int i = 0; i < query.length; i++) {
-            String[] conditions = query[i].split(" ");
-
-            int score = Integer.parseInt(conditions[conditions.length - 1]);
+            String[] q = query[i].replace(" and ", "").split(" ");
             
-            String condition = "";
-            for (int j = 0; j < conditions.length - 1; j += 2) {
-                condition += conditions[j];
-            }
-
-            if (map.containsKey(condition)) {
-                List<Integer> scores = map.get(condition);
-                
-                int val = check(scores, score);
-
-                answer[i] = scores.size() - val;
-            } else {
-                answer[i] = 0;
+            if (map.containsKey(q[0])) {
+                int cnt = find(map.get(q[0]), Integer.parseInt(q[1]));
+            
+                answer[i] = cnt;   
             }
         }
         
         return answer;
     }
     
-    public static void makeCases(int idx, String cur, String[] conditions) {
-        if (idx == 4) {
-            map.putIfAbsent(cur, new ArrayList());
-            map.get(cur).add(Integer.parseInt(conditions[4]));
-
+    public void makeCase (int depth, String cur, String[] applicant) {
+        if (depth == 4) {
+            if (!map.containsKey(cur)) {
+                map.put(cur, new ArrayList());
+            }
+            
+            map.get(cur).add(Integer.parseInt(applicant[depth]));
+            
             return;
         }
         
-        makeCases(idx + 1, cur + "-", conditions);
-        makeCases(idx + 1, cur + conditions[idx], conditions);
+        makeCase(depth + 1, cur + "-", applicant);
+        makeCase(depth + 1, cur + applicant[depth], applicant);
     }
     
-    public static int check(List<Integer> scores, int score) {
+    public int find (List<Integer> list, int num) {
         int start = 0;
-        int end = scores.size() - 1;
+        int end = list.size() - 1;
         
         while (start < end) {
             int mid = (start + end) / 2;
             
-            if (scores.get(mid) >= score) {
-                end = mid;
-            } else {
+            int target = list.get(mid);
+            
+            if (target < num) {
                 start = mid + 1;
+            } else {
+                end = mid;
             }
         }
         
-        if (scores.get(start) >= score) {
-            return start;
+        if (list.get(start) >= num) {
+            return list.size() - start;
         } else {
-            return scores.size();
+            return 0;
         }
     }
 }
