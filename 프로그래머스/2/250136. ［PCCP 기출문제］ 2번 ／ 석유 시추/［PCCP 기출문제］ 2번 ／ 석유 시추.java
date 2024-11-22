@@ -1,71 +1,69 @@
 import java.util.*;
 
 class Solution {
-    public int[][] deltas = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-
-    public int n, m;
-    
+    public int[] amount;
+    public int R, C;
     public boolean[][] visited;
-    
-    public int[] oil;
+    public int[][] deltas = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     
     public int solution(int[][] land) {
-        n = land.length;
-        m = land[0].length;
+        R = land.length;
+        C = land[0].length;
         
-        visited = new boolean[n][m];
-        oil = new int[m];
+        amount = new int[C];
         
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        visited = new boolean[R][C];
+        
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
                 if (land[i][j] == 1 && !visited[i][j]) {
-                    bfs(i, j, land);
+                    find(new int[]{i, j}, land);
                 }
             }
         }
         
-        int maxOil = 0;
+        int answer = 0;
         
-        for (int size : oil) {
-            maxOil = Math.max(maxOil, size);
+        for (int i = 0; i < C; i++) {
+            answer = Math.max(answer, amount[i]);    
         }
         
-        return maxOil;
+        return answer;
     }
     
-    public void bfs(int r, int c, int[][] land) {
+    public void find (int[] start, int[][] land) {
         Queue<int[]> q = new ArrayDeque();
-        q.offer(new int[]{r, c});
+        q.offer(start);
         
-        visited[r][c] = true;
+        visited[start[0]][start[1]] = true;
         
         Set<Integer> set = new HashSet();
-        set.add(c);
+        set.add(start[1]);
         
         int count = 1;
         
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             int[] cur = q.poll();
             
             for (int d = 0; d < 4; d++) {
                 int nr = cur[0] + deltas[d][0];
                 int nc = cur[1] + deltas[d][1];
                 
-                if(isIn(nr, nc) && land[nr][nc] == 1 && !visited[nr][nc]) {
-                    q.offer(new int[]{nr, nc});
+                if (isIn(nr, nc) && !visited[nr][nc] && land[nr][nc] == 1) {
                     visited[nr][nc] = true;
-                    count++;
+                    q.offer(new int[]{nr, nc});
                     set.add(nc);
+                    count++;
                 }
             }
         }
         
         for (int num : set) {
-            oil[num] += count;
+            amount[num] += count;
         }
     }
     
-    public boolean isIn(int r, int c) {
-        return r >= 0 && r < n && c >= 0 && c < m;
+    public boolean isIn (int r, int c) {
+        return r >= 0 && r < R && c >= 0 && c < C;
     }
 }
