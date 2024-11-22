@@ -1,16 +1,14 @@
 class Solution {
-    public String answer;
-    
     public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
-        answer = "";
+        String answer = "";
         
         int cur = change(pos);
         
+        if (cur >= change(op_start) && cur <= change(op_end)) {
+            cur = change(op_end);
+        }
+        
         for (String cmd : commands) {
-            if (cur >= change(op_start) && cur <= change(op_end)) {
-                cur = change(op_end);
-            }
-            
             if (cmd.equals("prev")) {
                 cur = Math.max(cur - 10, 0);
             } else {
@@ -22,7 +20,9 @@ class Solution {
             }
         }
         
-        changeToStr(cur);
+        answer += cur / 60 >= 10 ? cur / 60 : "0" + (cur / 60);
+        answer += ":";
+        answer += cur % 60 >= 10 ? cur % 60 : "0" + (cur % 60);
         
         return answer;
     }
@@ -31,21 +31,5 @@ class Solution {
         String[] s = str.split(":");
         
         return Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
-    }
-    
-    public void changeToStr (int cur) {
-        if (cur / 60 >= 10) {
-            answer += cur / 60;
-        } else {
-            answer += "0" + (cur / 60);
-        }
-        
-        answer += ":";
-        
-        if (cur % 60 >= 10) {
-            answer += cur % 60;
-        } else {
-            answer += "0" + (cur % 60);
-        }
     }
 }
