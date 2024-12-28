@@ -66,6 +66,8 @@ public class Main {
         boolean[] visited = new boolean[25];
         visited[start] = true;
 
+        int cnt = 1;
+
         while (!q.isEmpty()) {
             int cur = q.poll();
 
@@ -80,19 +82,18 @@ public class Main {
                         if (s == num) {
                             visited[num] = true;
                             q.offer(num);
+                            cnt++;
                         }
                     }
                 }
             }
         }
 
-        for (int num : selected) {
-            if (!visited[num]) {
-                return false;
-            }
+        if (cnt == 7) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public static boolean isIn (int r, int c) {
