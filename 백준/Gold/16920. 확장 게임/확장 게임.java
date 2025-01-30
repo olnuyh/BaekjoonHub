@@ -7,21 +7,6 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static class Castle implements Comparable<Castle> {
-        int r, c, player;
-
-        public Castle (int r, int c, int player) {
-            this.r = r;
-            this.c = c;
-            this.player = player;
-        }
-
-        @Override
-        public int compareTo(Castle o) {
-            return this.player - o.player;
-        }
-    }
-
     public static int N, M;
     public static int[][] deltas = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
@@ -44,7 +29,11 @@ public class Main {
         int[][] map = new int[N][M];
         int[] answer = new int[P + 1];
 
-        PriorityQueue<Castle> pq = new PriorityQueue<>();
+        Queue<int[]>[] queues = new Queue[P + 1];
+
+        for (int p = 1; p <= P; p++) {
+            queues[p] = new ArrayDeque<>();
+        }
 
         for (int i = 0; i < N; i++) {
             char[] arr = br.readLine().toCharArray();
@@ -58,68 +47,50 @@ public class Main {
                     map[i][j] = -1;
                 } else {
                     map[i][j] = arr[j] - '0';
-                    pq.offer(new Castle(i, j, map[i][j]));
+                    queues[map[i][j]].add(new int[]{i, j});
                     answer[map[i][j]]++;
                 }
             }
         }
 
         while (true) {
-            if (pq.isEmpty()) {
-                break;
-            }
-
-            PriorityQueue<Castle> next = new PriorityQueue<>();
-
-            while (!pq.isEmpty()) {
-                Queue<Castle> q = new ArrayDeque<>();
-
-                int num = pq.peek().player;
-
-                while (!pq.isEmpty() && pq.peek().player == num) {
-                    Castle cur = pq.poll();
-
-                    for (int d = 0; d < 4; d++) {
-                        int nr = cur.r + deltas[d][0];
-                        int nc = cur.c + deltas[d][1];
-
-                        if (isIn(nr, nc) && map[nr][nc] == 0) {
-                            q.offer(new Castle(nr, nc, cur.player));
-                            map[nr][nc] = cur.player;
-                            answer[cur.player]++;
-                        }
-                    }
-                }
-
-                for (int l = 1; l < len[num]; l++) {
-                    if (q.isEmpty()) {
-                        break;
-                    }
-
-                    int size = q.size();
+            for (int p = 1; p <= P; p++) {
+                for (int l = 1; l <= len[p]; l++) {
+                    int size = queues[p].size();
 
                     while (--size >= 0) {
-                        Castle cur = q.poll();
+                        int[] cur = queues[p].poll();
 
                         for (int d = 0; d < 4; d++) {
-                            int nr = cur.r + deltas[d][0];
-                            int nc = cur.c + deltas[d][1];
+                            int nr = cur[0] + deltas[d][0];
+                            int nc = cur[1] + deltas[d][1];
 
                             if (isIn(nr, nc) && map[nr][nc] == 0) {
-                                q.offer(new Castle(nr, nc, cur.player));
-                                map[nr][nc] = cur.player;
-                                answer[cur.player]++;
+                                map[nr][nc] = p;
+                                answer[p]++;
+                                queues[p].add(new int[]{nr, nc});
                             }
                         }
                     }
-                }
 
-                while (!q.isEmpty()) {
-                    next.offer(q.poll());
+                    if (queues[p].isEmpty()) {
+                        break;
+                    }
                 }
             }
 
-            pq = next;
+            boolean zero = true;
+
+            for (int p = 1; p <= P; p++) {
+                if (!queues[p].isEmpty()) {
+                    zero = false;
+                    break;
+                }
+            }
+
+            if (zero) {
+                break;
+            }
         }
 
         for (int i = 1; i <= P; i++) {
