@@ -19,10 +19,11 @@ public class Main {
             A[i] = Integer.parseInt(st.nextToken());
         }
 
-        int len = 0;
+        int len = 1;
         D = new int[N];
+        D[0] = A[0];
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i < N; i++) {
             int pos = findPos(0, len, A[i]);
 
             if (pos == -1) {
