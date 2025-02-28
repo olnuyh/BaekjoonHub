@@ -9,29 +9,27 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
 		
-		int[] weight = new int[n + 1];
-		int[] value = new int[n + 1];
+		int[][] product = new int[N + 1][2];
 		
-		for(int i = 1; i <= n; i++) {
+		for(int i = 1; i <= N; i++) {
 			st = new StringTokenizer(br.readLine());
-			weight[i] = Integer.parseInt(st.nextToken());
-			value[i] = Integer.parseInt(st.nextToken());
+			int W = Integer.parseInt(st.nextToken());
+			int V = Integer.parseInt(st.nextToken());
+			
+			product[i][0] = W;
+			product[i][1] = V;
 		}
 		
-		int[][] D = new int[n + 1][k + 1];
-		
-		for(int i = 1; i <= n; i++) {
-			for(int j = 1; j <= k; j++) {
-				D[i][j] = D[i - 1][j];
-				if(j - weight[i] >= 0)
-					D[i][j] = Math.max(D[i - 1][j], D[i - 1][j - weight[i]] + value[i]);
-			}
+		int[] D = new int[K + 1];
+		for(int i = 1; i <= N; i++) {
+			for(int j = K; j >= product[i][0]; j--)
+				D[j] = Math.max(D[j], product[i][1] + D[j - product[i][0]]);
 		}
 		
-		System.out.println(D[n][k]);
+		System.out.println(D[K]);
 	}
 
 }
