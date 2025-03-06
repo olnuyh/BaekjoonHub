@@ -10,26 +10,26 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
 
-        int[][] consultings = new int[N + 1][2];
+        int[] T = new int[N];
+        int[] P = new int[N];
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
 
-            consultings[i][0] = Integer.parseInt(st.nextToken());
-            consultings[i][1] = Integer.parseInt(st.nextToken());
+            T[i] = Integer.parseInt(st.nextToken());
+            P[i] = Integer.parseInt(st.nextToken());
         }
 
-        long[] profit = new long[N + 2];
+        int[] D = new int[N + 1];
 
-        for (int i = N; i >= 1; i--) {
-            if (i + consultings[i][0] > N + 1) {
-                profit[i] = profit[i + 1];
-                continue;
+        for (int i = N - 1; i >= 0; i--) {
+            if (i + T[i] <= N) {
+                D[i] = Math.max(D[i + 1], D[i + T[i]] + P[i]);
+            } else {
+                D[i] = D[i + 1];
             }
-
-            profit[i] = Math.max(profit[i + 1], profit[i + consultings[i][0]] + consultings[i][1]);
         }
 
-        System.out.println(profit[1]);
+        System.out.println(D[0]);
     }
 }
