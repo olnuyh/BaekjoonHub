@@ -15,9 +15,7 @@ public class Main {
         int[] plum = new int[T + 1];
 
         for (int i = 1; i <= T; i++) {
-            st = new StringTokenizer(br.readLine());
-
-            plum[i] = Integer.parseInt(st.nextToken()) - 1;
+            plum[i] = Integer.parseInt(br.readLine()) - 1;
         }
 
         int[][][] D = new int[T + 1][2][W + 1];
@@ -38,11 +36,13 @@ public class Main {
                     if (D[i - 1][j][k] != -1) {
                         D[i][j][k] = D[i - 1][j][k] + val;
                     }
-                }
 
-                for (int k = 1; k <= W; k++) {
-                    if (D[i - 1][(j + 1) % 2][k - 1] != -1) {
-                        D[i][j][k] = Math.max(D[i][j][k], D[i - 1][(j + 1) % 2][k - 1] + val);
+                    if (k == 0) {
+                        continue;
+                    }
+
+                    if (D[i - 1][1 - j][k - 1] != -1) {
+                        D[i][j][k] = Math.max(D[i][j][k], D[i - 1][1 - j][k - 1] + val);
                     }
                 }
             }
