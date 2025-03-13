@@ -23,20 +23,16 @@ public class Main {
 
             int M = Integer.parseInt(br.readLine());
 
-            int[][] D = new int[N + 1][M + 1];
-            D[0][0] = 1;
+            int[] D = new int[M + 1];
+            D[0] = 1;
 
             for (int i = 1; i <= N; i++) {
-                for (int j = 0; j <= M; j++) {
-                    D[i][j] = D[i - 1][j];
-
-                    if (j - coins[i] >= 0) {
-                        D[i][j] += D[i][j -coins[i]];
-                    }
+                for (int j = coins[i]; j <= M; j++) {
+                    D[j] += D[j - coins[i]];
                 }
             }
 
-            sb.append(D[N][M]).append("\n");
+            sb.append(D[M]).append("\n");
         }
 
         System.out.println(sb);
