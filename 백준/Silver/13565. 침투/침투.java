@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -10,7 +8,6 @@ public class Main {
     public static int[][] map;
     public static boolean[][] visited;
     public static int[][] deltas = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-    public static Queue<int[]> q;
     public static boolean canDeliver;
 
     public static void main(String[] args) throws IOException {
@@ -22,7 +19,6 @@ public class Main {
 
         map = new int[M][N];
 
-        q = new ArrayDeque<>();
         visited = new boolean[M][N];
 
         for (int i = 0; i < M; i++) {
@@ -30,16 +26,19 @@ public class Main {
 
             for (int j = 0; j < N; j++) {
                 map[i][j] = temp[j] - '0';
-
-                if (i == 0 && map[i][j] == 0) {
-                    q.offer(new int[]{0, j});
-                    visited[0][j] = true;
-                }
             }
         }
 
         canDeliver = false;
-        bfs();
+
+        for (int j = 0; j < N; j++) {
+            if (map[0][j] == 0 && !visited[0][j]) {
+                if (dfs(0, j)) {
+                    canDeliver = true;
+                    break;
+                }
+            }
+        }
 
         if (canDeliver) {
             System.out.println("YES");
@@ -48,25 +47,25 @@ public class Main {
         }
     }
 
-    public static void bfs () {
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
+    public static boolean dfs (int r, int c) {
+        if (r == M - 1) {
+            return true;
+        }
 
-            if (cur[0] == M - 1) {
-                canDeliver = true;
-                return;
-            }
+        visited[r][c] = true;
 
-            for (int d = 0; d < 4; d++) {
-                int nr = cur[0] + deltas[d][0];
-                int nc = cur[1] + deltas[d][1];
+        for (int d = 0; d < 4; d++) {
+            int nr = r + deltas[d][0];
+            int nc = c + deltas[d][1];
 
-                if (isIn(nr, nc) && map[nr][nc] == 0 && !visited[nr][nc]) {
-                    visited[nr][nc] = true;
-                    q.offer(new int[]{nr, nc});
+            if (isIn(nr, nc) && map[nr][nc] == 0 && !visited[nr][nc]) {
+                if (dfs(nr, nc)) {
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
     public static boolean isIn (int r, int c) {
