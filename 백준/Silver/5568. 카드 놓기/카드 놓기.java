@@ -23,40 +23,22 @@ public class Main {
 
         set = new HashSet<>();
 
-        pickNums(0, 0, new int[K]);
+        makeNums(0, new boolean[N], "");
 
         System.out.println(set.size());
     }
 
-    public static void pickNums (int cur, int start, int[] selected) {
+    public static void makeNums (int cur, boolean[] visited, String s) {
         if (cur == K) {
-            makeNums(0, new boolean[K], selected, new int[K]);
+            set.add(Integer.parseInt(s));
 
             return;
         }
 
-        for (int i = start; i < N; i++) {
-            selected[cur] = nums[i];
-            pickNums(cur + 1, i + 1, selected);
-        }
-    }
-
-    public static void makeNums (int cur, boolean[] visited, int[] original, int[] selected) {
-        if (cur == K) {
-            StringBuilder sb = new StringBuilder();
-
-            for (int num : selected) {
-                sb.append(num);
-            }
-
-            set.add(Integer.parseInt(sb.toString()));
-        }
-
-        for (int i = 0; i < original.length; i++) {
+        for (int i = 0; i < N; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                selected[cur] = original[i];
-                makeNums(cur + 1, visited, original, selected);
+                makeNums(cur + 1, visited, s + nums[i]);
                 visited[i] = false;
             }
         }
