@@ -1,10 +1,26 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static class Node implements Comparable<Node> {
+        int dest, dist;
+
+        public Node (int dest, int dist) {
+            this.dest = dest;
+            this.dist = dist;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.dist - o.dist;
+        }
+    }
+
+    public static int[] D;
+    public static List<Node>[] graphs;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -20,10 +36,10 @@ public class Main {
             items[i] = Integer.parseInt(st.nextToken());
         }
 
-        int[][] dist = new int[N + 1][N + 1];
+        graphs = new ArrayList[N + 1];
 
         for (int i = 1; i <= N; i++) {
-            Arrays.fill(dist[i], 2000);
+            graphs[i] = new ArrayList();
         }
 
         for (int i = 0; i < R; i++) {
@@ -33,29 +49,22 @@ public class Main {
             int b = Integer.parseInt(st.nextToken());
             int l = Integer.parseInt(st.nextToken());
 
-            dist[a][b] = l;
-            dist[b][a] = l;
-        }
-
-        for (int k = 1; k <= N; k++) {
-            for (int i = 1; i <= N; i++) {
-                for (int j = 1; j <= N; j++) {
-                    if (i == j || j == k || i == k) {
-                        continue;
-                    }
-
-                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
-                }
-            }
+            graphs[a].add(new Node(b, l));
+            graphs[b].add(new Node(a, l));
         }
 
         int maxItem = 0;
 
         for (int i = 1; i <= N; i++) {
-            int sum = items[i];
+            D = new int[N + 1];
+            Arrays.fill(D, Integer.MAX_VALUE);
+            D[i] = 0;
 
+            search(i);
+
+            int sum = 0;
             for (int j = 1; j <= N; j++) {
-                if (dist[i][j] <= M) {
+                if (D[j] <= M) {
                     sum += items[j];
                 }
             }
@@ -64,5 +73,21 @@ public class Main {
         }
 
         System.out.println(maxItem);
+    }
+
+    public static void search (int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(start, 0));
+
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+
+            for (Node next : graphs[cur.dest]) {
+                if (D[next.dest] > D[cur.dest] + next.dist) {
+                    D[next.dest] = D[cur.dest] + next.dist;
+                    pq.offer(next);
+                }
+            }
+        }
     }
 }
