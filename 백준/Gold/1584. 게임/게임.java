@@ -1,25 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static class Pos implements Comparable<Pos> {
-        int r, c, val;
-
-        public Pos (int r, int c, int val) {
-            this.r = r;
-            this.c = c;
-            this.val = val;
-        }
-
-        @Override
-        public int compareTo(Pos o) {
-            return this.val - o.val;
-        }
-    }
-
     public static int[][] deltas = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     public static final int MAX = 250001;
 
@@ -73,23 +57,32 @@ public class Main {
 
         D[0][0] = 0;
 
-        PriorityQueue<Pos> pq = new PriorityQueue<>();
-        pq.offer(new Pos(0, 0, 0));
+        Deque<int[]> dq = new ArrayDeque<>();
+        dq.offer(new int[]{0, 0});
 
-        while (!pq.isEmpty()) {
-            Pos cur = pq.poll();
+        while (!dq.isEmpty()) {
+            int[] cur = dq.poll();
+
+            if (cur[0] == 500 && cur[1] == 500) {
+                break;
+            }
 
             for (int d = 0; d < 4; d++) {
-                int nr = cur.r + deltas[d][0];
-                int nc = cur.c + deltas[d][1];
+                int nr = cur[0] + deltas[d][0];
+                int nc = cur[1] + deltas[d][1];
 
                 if (nr < 0 || nr > 500 || nc < 0 || nc > 500 || map[nr][nc] < 0) {
                     continue;
                 }
 
-                if (D[nr][nc] > D[cur.r][cur.c] + map[nr][nc]) {
-                    D[nr][nc] = Math.min(D[nr][nc], D[cur.r][cur.c] + map[nr][nc]);
-                    pq.offer(new Pos(nr, nc, D[nr][nc]));
+                if (D[nr][nc] > D[cur[0]][cur[1]] + map[nr][nc]) {
+                    D[nr][nc] = Math.min(D[nr][nc], D[cur[0]][cur[1]] + map[nr][nc]);
+
+                    if (map[nr][nc] == 0) {
+                        dq.addFirst(new int[]{nr, nc});
+                    } else if (map[nr][nc] == 1) {
+                        dq.addLast(new int[]{nr, nc});
+                    }
                 }
             }
         }
