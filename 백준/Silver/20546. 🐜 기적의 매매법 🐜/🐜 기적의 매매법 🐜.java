@@ -22,16 +22,14 @@ public class Main {
         int sungminStock = 0;
 
         for (int i = 1; i <= 14; i++) {
-            if (junhyeonMoney >= price[i]) {
-                junhyeonStock += junhyeonMoney / price[i];
-                junhyeonMoney = junhyeonMoney % price[i];
-            }
+            junhyeonStock += junhyeonMoney / price[i];
+            junhyeonMoney = junhyeonMoney % price[i];
 
             if (i - 3 >= 0) {
                 if (price[i - 3] < price[i - 2] && price[i - 2] < price[i - 1]) {
                     sungminMoney += sungminStock * price[i];
                     sungminStock = 0;
-                } else if (price[i - 3] > price[i - 2] && price[i - 2] > price[i - 1] && sungminMoney >= price[i]) {
+                } else if (price[i - 3] > price[i - 2] && price[i - 2] > price[i - 1]) {
                     sungminStock += sungminMoney / price[i];
                     sungminMoney = sungminMoney % price[i];
                 }
